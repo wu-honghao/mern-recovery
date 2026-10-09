@@ -39,7 +39,7 @@ describe('user',()=>{
     it('should return 401 when the login password is wrong', async () => {
         const res = await request(app).post('/auth/login').send({
             email: LOGIN_EMAIL,
-            password: '1223444'
+            password: '1223'
         })
 
         expect(res.status).toBe(401)
@@ -52,7 +52,7 @@ describe('user',()=>{
     it('should return 200 when email and password is correct',async ()=>{
         const res = await request(app).post('/auth/login').send({
             email: LOGIN_EMAIL,
-            password:'123455'
+            password:'1223444'
         })
 
         expect(res.status).toBe(200)

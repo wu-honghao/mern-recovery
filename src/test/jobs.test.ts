@@ -1,6 +1,26 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, beforeAll, afterAll } from 'vitest'
 import request from 'supertest'
 import app from '../app.js'
+import bcrypt from 'bcryptjs'
+import { UserModel } from '../models/userModel.js'
+
+const GETJOB_EMAIL = 'test-job-002@example.com'
+
+beforeAll(async ()=>{
+    // create test user
+    const hashedPassword = await bcrypt.hash('1223444', 10)
+    await UserModel.create({
+        email: GETJOB_EMAIL,
+        password: hashedPassword
+    })
+})
+afterAll(async ()=>{
+    await UserModel.deleteMany({
+        email: {
+            $in:[GETJOB_EMAIL]
+        }
+    })
+})
 
 describe('jobs',()=>{
     it('should return 401 when requesting jobs without token', async () => {
@@ -18,8 +38,8 @@ describe('jobs',()=>{
     // → expect 200
     it('should return 200 when get jobs with token',async ()=>{
         const resLogin = await request(app).post('/auth/login').send({
-            email:'okeahh5@gmail.com',
-            password: '123455'
+            email: GETJOB_EMAIL,
+            password: '1223444'
         })
 
         const res = await request(app).get('/jobs').set('Authorization',`Bearer ${resLogin.body.data.token}`)
