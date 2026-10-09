@@ -28,3 +28,5 @@ const jobSchema = new Schema({
 })
 
 export const Job = mongoose.model('Job', jobSchema)
+export type JobType =
+  mongoose.InferSchemaType<typeof jobSchema>

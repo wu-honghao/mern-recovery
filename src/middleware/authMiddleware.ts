@@ -9,14 +9,15 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction) 
         })
     }
 
-    const token = authorization.split(' ')[1]
+    const token = authorization.slice(7)
 
-    if (!process.env.JWT_SECRET) {
-        throw new Error("JWT_SECRET is not defined")
+    const jwtSecret = process.env.JWT_SECRET
+    if (!jwtSecret) {
+        throw new Error('JWT_SECRET is not configured')
     }
 
     try{
-        const payload = jwt.verify(token, process.env.JWT_SECRET)
+        const payload = jwt.verify(token, jwtSecret)
 
         if (
             typeof payload === "string" ||

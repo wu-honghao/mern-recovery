@@ -1,7 +1,8 @@
 import type { Request, Response } from "express";
 import { deleteJobServices, getJobByIdService, getJobs, jobAdd, updateJobByIdService, type JobQueryService } from "../services/jobService.js";
-import mongoose, { isObjectIdOrHexString } from "mongoose";
+import mongoose, { isObjectIdOrHexString, type QueryFilter } from "mongoose";
 import { createJobSchema, getJobByIdSchema, jobQuerySchema, updateJobSchema } from "../validators/jobValidator.js";
+import type { JobType } from "../models/jobModel.js";
 
 const escapeRegex = (value: string) => {
   return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
@@ -17,9 +18,9 @@ export const getJobList = async (req: Request,res: Response) => {
     
     const { sort, permitSupported , page, limit, location, title } = result.data
 
-    const filter: JobQueryService = {
+    const filter: QueryFilter<JobType> = {
         ...(location && {
-        location: location
+            location: location
         }),
 
         ...(permitSupported !== undefined && {
@@ -28,7 +29,7 @@ export const getJobList = async (req: Request,res: Response) => {
 
         ...(title && {
             title: new RegExp(escapeRegex(title.trim()), "i")
-        })
+        }),
     }
     
     let sortOrder: 1 | -1 | undefined = undefined

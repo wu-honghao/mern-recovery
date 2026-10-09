@@ -1,4 +1,5 @@
-import { Job } from "../models/jobModel.js"
+import type { QueryFilter } from "mongoose"
+import { Job, type JobType } from "../models/jobModel.js"
 import type { CreateJob, UpdateJob } from "../validators/jobValidator.js"
 
 export const jobAdd = async (job: CreateJob) => {
@@ -12,7 +13,7 @@ export type JobQueryService = {
     permitSupported?: boolean | undefined
     title?: RegExp
 }
-export const getJobs = async (query: JobQueryService, pageNumber: number, limitNumber: number, sortOrder?: 1 | -1) => {
+export const getJobs = async (query: QueryFilter<JobType>, pageNumber: number, limitNumber: number, sortOrder?: 1 | -1) => {
     let queryData = Job.find(query)
     if(sortOrder !==  undefined){
        queryData = queryData.sort({ salary: sortOrder })
