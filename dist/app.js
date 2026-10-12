@@ -8,14 +8,18 @@ import userRouter from "./routes/userRoutes.js";
 import { authMiddleware } from "./middleware/authMiddleware.js";
 const app = express();
 app.use(express.json());
+const frontendOrigin = process.env.FRONTEND_ORIGIN;
+if (!frontendOrigin) {
+    throw new Error('FRONTEND_ORIGIN is not configured');
+}
 app.use(cors({
-    origin: 'http://localhost:5173'
+    origin: process.env.FRONTEND_ORIGIN
 }));
 app.use('/auth', userRouter);
 app.use('/jobs', authMiddleware, jobRouter);
 app.use(errorHandler);
 const startServer = async () => {
-    await mongoose.connect(process.env.MONGO_URI);
+    await mongoose.connect(process.env.MONGODB_URI);
     app.listen(3000, () => {
         console.log("Server running on port 3000");
     });
