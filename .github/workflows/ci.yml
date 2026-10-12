@@ -15,8 +15,9 @@ jobs:
           - 27017:27017
 
     env:
-      MONGO_URI: mongodb://127.0.0.1:27017/mern_recovery_test
+      MONGODB_URI: mongodb://127.0.0.1:27017/mern_recovery_test
       JWT_SECRET: test-jwt-secret-for-ci-only
+      FRONTEND_ORIGIN: http://localhost:5173
 
     steps:
       - name: Checkout
